@@ -18,7 +18,7 @@ public class User {
 	/*
 	 * These are the private attributes for this entity object
 	 */
-	private int id;
+	//private int id;
     private String userName;
     private String password;
     private String firstName;
