@@ -26,7 +26,7 @@ public class TestPosting {
 		
 		CSE360.deleteQuestion(id3);
 		CSE360.deleteReply(id2, r2);
-		
+		 
 		System.out.println("==========Admin Updates=======================");
 		System.out.println("|Removed bad faith replies                   |");
 		System.out.println("==============================================");
