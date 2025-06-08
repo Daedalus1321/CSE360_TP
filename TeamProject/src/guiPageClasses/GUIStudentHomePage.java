@@ -61,6 +61,7 @@ public class GUIStudentHomePage {
 	
 	private TextField text_post = new TextField();
 	private TextField text_keywords = new TextField();
+	private TextField text_title = new TextField();
 	
 	/**********************************************************************************************
 
@@ -120,7 +121,11 @@ public class GUIStudentHomePage {
         button_Quit.setOnAction((event) -> {performQuit(); });
         
         setupButtonUI(button_Post, "Dialog", 18, 50, Pos.BASELINE_LEFT, 20, 150);
-        //button_Post.setOnAction((event) -> {post(); });
+        button_Post.setOnAction((event) -> {post(text_title.getText(), text_post.getText()); });
+        
+        setupTextUI(text_title, "Arial", 18, 100, Pos.BASELINE_LEFT, 60, 150, true);
+        setupTextUI(text_post, "Arial", 18, 300, Pos.BASELINE_LEFT, 170, 150, true);
+        setupTextUI(text_keywords, "Arial", 18, 50, Pos.BASELINE_LEFT, 480, 150, true);
         
         TableColumn<GenericQuestion, String> colTitle = new TableColumn<GenericQuestion, String>("Title");
     	TableColumn<GenericQuestion, String> colPoster = new TableColumn<GenericQuestion, String>("User");
@@ -261,6 +266,19 @@ public class GUIStudentHomePage {
 	}
 
 	
+	/**********
+	 * Private local method to initialize the standard fields for a text field
+	 */
+	private void setupTextUI(TextField t, String ff, double f, double w, Pos p, double x, double y, boolean e){
+		t.setFont(Font.font(ff, f));
+		t.setMinWidth(w);
+		t.setMaxWidth(w);
+		t.setAlignment(p);
+		t.setLayoutX(x);
+		t.setLayoutY(y);		
+		t.setEditable(e);
+	}	
+	
 	/**********************************************************************************************
 
 	User Interface Actions for this page
@@ -279,6 +297,8 @@ public class GUIStudentHomePage {
 		String q1 = CSE360.post(title, content, theUser);
 		
 		GenericQuestion Q = new GenericQuestion(title, theUser.getUserName(),0,q1);
+		
+		
 	}
 	
 	private void performLogout() {
