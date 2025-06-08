@@ -76,6 +76,13 @@ public class QuestionList {
 		return questions[numquestions-1].getQID();
 	}
 	
+	public Question getQindex(int index){
+		return questions[index];
+	}
+	public int getNumQ(){
+		return numquestions;
+	}
+	
 	/** <p> Method: linkReplies(AnswerList replies)</p>
 	 * <p> links question list to an answer list</p>
 	 * @param replies is the linked AnswerList

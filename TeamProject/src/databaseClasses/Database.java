@@ -10,7 +10,7 @@ import entityClasses.User;
 /*******
  * <p> Title: Database Class. </p>
  * 
- * <p> Description: This is an in-memory database built on H2.  Detailed documentation of H2 can
+ * <p> Description: This is an in-memory database built on .  Detailed documentation of H2 can
  * be found at https://www.h2database.com/html/main.html (Click on "PDF (2MP) for a PDF of 438 pages
  * on the H2 main page.)  This class leverages H2 and provides numerous special supporting methods.
  * </p>
@@ -84,7 +84,7 @@ public class Database {
 			connection = DriverManager.getConnection(DB_URL, USER, PASS);
 			statement = connection.createStatement(); 
 			// You can use this command to clear the database and restart from fresh.
-			//statement.execute("DROP ALL OBJECTS");//USE THIS TO RESET ==================================================
+			statement.execute("DROP ALL OBJECTS");//USE THIS TO RESET ==================================================
 
 			createTables();  // Create the necessary tables if they don't exist
 		} catch (ClassNotFoundException e) {
@@ -118,11 +118,17 @@ public class Database {
 		statement.execute(userTable);
 		
 		// Create the invitation codes table
-	    String invitationCodesTable = "CREATE TABLE IF NOT EXISTS InvitationCodes ("
-	            + "code VARCHAR(10) PRIMARY KEY, "
-	    		+ "emailAddress VARCHAR(255), "
-	            + "role VARCHAR(10))";
-	    statement.execute(invitationCodesTable);
+		String invitationCodesTable = "CREATE TABLE IF NOT EXISTS InvitationCodes ("
+			    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+			    + "code VARCHAR(10) UNIQUE NOT NULL, "
+			    + "emailAddress VARCHAR(255) NOT NULL, "
+			    + "role VARCHAR(20) NOT NULL, "
+			    + "created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "
+			    + "expiration_date TIMESTAMP NOT NULL, "
+			    + "used BOOLEAN DEFAULT FALSE, "
+			    + "used_date TIMESTAMP NULL"
+			    + ")";
+			statement.execute(invitationCodesTable);
 	}
 
 
@@ -419,21 +425,54 @@ public class Database {
 	 * 
 	 */
 	// Generates a new invitation code and inserts it into the database.
-	public String generateInvitationCode(String emailAddress, String role) {
-	    String code = UUID.randomUUID().toString().substring(0, 6); // Generate a random 6-character code
-	    String query = "INSERT INTO InvitationCodes (code, emailaddress, role) VALUES (?, ?, ?)";
+//	public String generateInvitationCode(String emailAddress, String role) {
+//	    String code = UUID.randomUUID().toString().substring(0, 6); // Generate a random 6-character code
+//	    String query = "INSERT INTO InvitationCodes (code, emailaddress, role) VALUES (?, ?, ?)";
+//
+//	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+//	        pstmt.setString(1, code);
+//	        pstmt.setString(2, emailAddress);
+//	        pstmt.setString(3, role);
+//	        pstmt.executeUpdate();
+//	    } catch (SQLException e) {
+//	        e.printStackTrace();
+//	    }
+//	    return code;
+//	}
 
-	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-	        pstmt.setString(1, code);
-	        pstmt.setString(2, emailAddress);
-	        pstmt.setString(3, role);
-	        pstmt.executeUpdate();
+	
+
+	public String generateInvitationCode(String emailAddress, String role) {
+	    String invitationCode = UUID.randomUUID().toString().substring(0, 6); // Generate a random 6-character code
+	    
+	    long expirationTime = System.currentTimeMillis() + (24 * 60 * 60 * 1000);
+	    Timestamp expiration = new Timestamp(expirationTime);
+	    
+	    String sql = "INSERT INTO InvitationCodes (code, emailAddress, role, expiration_date) VALUES (?, ?, ?, ?)";
+	    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+	        stmt.setString(1, invitationCode);
+	        stmt.setString(2, emailAddress);
+	        stmt.setString(3, role);
+	        stmt.setTimestamp(4, expiration);
+	        stmt.executeUpdate();
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
-	    return code;
+	    
+	    return invitationCode;
 	}
 
+	// Clean up expired invitations
+	public void cleanupExpiredInvitations() {
+	    String sql = "DELETE FROM InvitationCodes WHERE expiration_date < CURRENT_TIMESTAMP";
+	    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+	        stmt.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	
 	
 	/*******
 	 * <p> Method: int getNumberOfInvitations() </p>
@@ -511,6 +550,28 @@ public class Database {
 	    return "";
 	}
 
+	
+	
+	
+	// In your Database class
+	public boolean isInvitationExpired(String invitationCode) {
+	    String sql = "SELECT expiration_date FROM invitations WHERE code = ?";
+	    try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+	        stmt.setString(1, invitationCode);
+	        ResultSet rs = stmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            Timestamp expiration = rs.getTimestamp("expiration_date");
+	            Timestamp now = new Timestamp(System.currentTimeMillis());
+	            return now.after(expiration);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return true; // Assume expired if error occurs
+	}
+	
+	
 	
 	/*******
 	 * <p> Method: String getEmailAddressUsingCode (String code ) </p>
@@ -792,7 +853,7 @@ public class Database {
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        if (rs.next()) {
-	            return rs.getString("lastName"); // Return last name role if user exists
+	            return rs.getString("firstName"); // Return last name role if user exists
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
@@ -1240,4 +1301,3 @@ public class Database {
 		} 
 	}
 }
-

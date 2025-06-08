@@ -2,6 +2,9 @@ package guiPageClasses;
 
 import applicationMainMethodClasses.FCMainClass;
 import crud.*;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
@@ -43,21 +46,26 @@ public class GUIStudentHomePage {
 	
 	private Button button_Logout = new Button("Logout");
 	private Button button_Quit = new Button("Quit");
-
+	private Button button_Post = new Button("Post");
+	
 	private Stage primaryStage;	
 	private Pane theRootPane;
 	private Database theDatabase;
 	private User theUser;
 	
-	private TableView<Question> tblPosts = new TableView<>();
+	private TableView<GenericQuestion> tblPosts = new TableView<>();
+	private TableView<GenericAnswer> tblReplies = new TableView<>();
 	
-
+	private QuestionList CSE360 = new QuestionList("CSE360");
+	private AnswerList CSE360_a = new AnswerList("");
+	
 	/**********************************************************************************************
 
 	Constructors
 	
 	**********************************************************************************************/
-
+	
+	
 	
 	/**********
 	 * <p> Method: GUIStudentHomePage(Stage ps, Pane theRoot, Database database, User user) </p>
@@ -108,23 +116,83 @@ public class GUIStudentHomePage {
         setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 540);
         button_Quit.setOnAction((event) -> {performQuit(); });
         
-        TableColumn<Question, String> colTitle = new TableColumn<>("Title");
-    	TableColumn<Question, String> colPoster = new TableColumn<>("Poster");
-    	TableColumn<Question, Integer> colReplies = new TableColumn<>("# Replies");
-    	TableColumn<Question, String> colQID = new TableColumn<>("QID");
+        setupButtonUI(button_Post, "Dialog", 18, 50, Pos.BASELINE_LEFT, 20, 150);
+        //button_Post.setOnAction((event) -> {post(); });
         
-        tblPosts.getColumns().setAll(colTitle, colPoster, colReplies, colQID);
+        TableColumn<GenericQuestion, String> colTitle = new TableColumn<GenericQuestion, String>("Title");
+    	TableColumn<GenericQuestion, String> colPoster = new TableColumn<GenericQuestion, String>("User");
+    	TableColumn<GenericQuestion, Integer> colReplies = new TableColumn<GenericQuestion, Integer>("# Replies");
+    	TableColumn<GenericQuestion, String> colQID = new TableColumn<GenericQuestion, String>("QID");
+        
+    	colTitle.setCellValueFactory( cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+    	colPoster.setCellValueFactory( cellData -> new SimpleStringProperty(cellData.getValue().getPoster()));
+    	colReplies.setCellValueFactory( cellData -> new SimpleObjectProperty<Integer>(cellData.getValue().getNumreplies()));
+    	colQID.setCellValueFactory( cellData -> new SimpleStringProperty(cellData.getValue().getQID()));
+    	
+        tblPosts.getColumns().addAll(colTitle, colPoster, colReplies, colQID);
         tblPosts.setLayoutX(10);
         tblPosts.setLayoutY(200);
-        tblPosts.setMinSize(WINDOW_WIDTH-20, WINDOW_HEIGHT-(20+tblPosts.getLayoutY()));
+        tblPosts.setMinSize(WINDOW_WIDTH-20, 150);
+        tblPosts.setMaxHeight(150);
         
-        tblPosts.resizeColumn(colTitle, 400);
+        tblPosts.resizeColumn(colTitle, 350);
         tblPosts.resizeColumn(colPoster, 80);
-        tblPosts.resizeColumn(colReplies, 40);
-        tblPosts.resizeColumn(colQID, 40);
+        tblPosts.resizeColumn(colReplies, 20);
+        tblPosts.resizeColumn(colQID, 20);
+        
+        TableColumn<GenericAnswer, Boolean> colMarked = new TableColumn<>("ANS");
+        TableColumn<GenericAnswer, String> colContent = new TableColumn<>("Response");
+        TableColumn<GenericAnswer, String> colUser = new TableColumn<>("User");
+        TableColumn<GenericAnswer, String> colRID = new TableColumn<>("RID");
+        
+        colMarked.setCellValueFactory( cellData -> new SimpleObjectProperty<Boolean>(cellData.getValue().getMarkedAnswer()));
+        colContent.setCellValueFactory( cellData -> new SimpleStringProperty(cellData.getValue().getContent()));
+        colUser.setCellValueFactory( cellData -> new SimpleStringProperty(cellData.getValue().getPoster()));
+        colRID.setCellValueFactory( cellData -> new SimpleStringProperty(cellData.getValue().getRID()));
+        
+        tblReplies.getColumns().addAll(colMarked, colContent, colUser, colRID);
+        tblReplies.setLayoutX(10);
+        tblReplies.setLayoutY(360);
+        tblReplies.setMinSize(WINDOW_WIDTH-20, 150);
+        tblReplies.setMaxHeight(150);
+        
+        tblReplies.resizeColumn(colMarked, 20);
+        tblReplies.resizeColumn(colContent, 350);
+        tblReplies.resizeColumn(colUser, 50);
+        tblReplies.resizeColumn(colRID, 50);
+        
+        
+        CSE360.linkReplies(CSE360_a);
+		User u1 = new User("dSmit");
+		User u2 = new User("oVoge");
+		User u3 = new User("aHaus");
+		User u4 = new User("mPros");
+		User u5 = new User("pWord");
+		User u6 = new User("jKale");
+		
+		
+		String p1 = CSE360.post("Help with Gradle","content",u1);
+			for(int i = 0; i < 10; i++){CSE360.reply(p1, "", new User(""));}
+		String p2 = CSE360.post("Merge Issues","content",u2);
+			for(int i = 0; i < 2; i++){CSE360.reply(p2, "", new User(""));}
+		String p3 = CSE360.post("How do for loops work?","content",u3);
+			for(int i = 0; i < 1; i++){CSE360.reply(p3, "", new User(""));}
+		String p4 = CSE360.post("Assignment Assistance","content",u4);
+			for(int i = 0; i < 5; i++){CSE360.reply(p4, "", new User(""));}
+		String p5 = CSE360.post("When is HW due?","content",theUser);
+			for(int i = 0; i < 1; i++){CSE360.reply(p5, "", new User(""));}
+		String p6 = CSE360.post("Team Norms Megathread","content",u6);
+			for(int i = 0; i < 100; i++){CSE360.reply(p6, "", new User(""));}
+		String p7 = CSE360.post("Why won't anyone respond to me!?!?","content",u5);
+			
+		for(int i = 0; i < CSE360.getNumQ(); i++){
+			Question Q = CSE360.getQindex(i);
+			
+			tblPosts.getItems().add(new GenericQuestion(Q.getTitle(),Q.getPoster().getUserName(),Q.getNumReplies(),Q.getQID()));
+		}
+        
         setup();
 	}
-
 	
 	/**********
 	 * <p> Method: setup() </p>
@@ -138,8 +206,8 @@ public class GUIStudentHomePage {
 	    theRootPane.getChildren().addAll(
 			label_PageTitle, label_UserDetails, button_UpdateThisUser, line_Separator1,
 	        line_Separator4, 
-	        button_Logout,
-	        button_Quit, tblPosts
+	        button_Logout, button_Quit, button_Post,
+	        tblPosts, tblReplies
 	    );
 			
 	}
@@ -191,6 +259,11 @@ public class GUIStudentHomePage {
 			GUISystemStartUpPage.theUserUpdatePage.setup();	
 	}	
 
+	private void post(String title, String content){
+		String q1 = CSE360.post(title, content, theUser);
+		
+		GenericQuestion Q = new GenericQuestion(title, theUser.getUserName(),0,q1);
+	}
 	
 	private void performLogout() {
 		GUISystemStartUpPage.theSystemStartupPage.setup();
