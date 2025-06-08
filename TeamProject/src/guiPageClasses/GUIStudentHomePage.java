@@ -1,9 +1,11 @@
 package guiPageClasses;
 
 import applicationMainMethodClasses.FCMainClass;
+import crud.*;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
@@ -36,7 +38,6 @@ public class GUIStudentHomePage {
 	private Label label_PageTitle = new Label();
 	private Label label_UserDetails = new Label();
 	private Button button_UpdateThisUser = new Button("Account Update");
-	private Button button_Post = new Button("Post");
 	
 	private Line line_Separator1 = new Line(20, 130, FCMainClass.WINDOW_WIDTH-20, 130);
 	
@@ -49,6 +50,12 @@ public class GUIStudentHomePage {
 	private Pane theRootPane;
 	private Database theDatabase;
 	private User theUser;
+	
+	private TableView<Question> tblPosts = new TableView<>();
+	private TableColumn<Question, String> colTitle = new TableColumn<>("Title");
+	private TableColumn<Question, String> colPoster = new TableColumn<>("Poster");
+	private TableColumn<Question, Integer> colReplies = new TableColumn<>("# Replies");
+	private TableColumn<Question, String> colQID = new TableColumn<>("QID");
 
 	/**********************************************************************************************
 
@@ -73,19 +80,20 @@ public class GUIStudentHomePage {
 	 * @param user specifies the User for this GUI and it's methods
 	 * 
 	 */
-	@SuppressWarnings("unused")
+	@SuppressWarnings({ "unused", "unchecked" })
 	public GUIStudentHomePage(Stage ps, Pane theRoot, Database database, User user) {
 		GUISystemStartUpPage.theStudentHomePage = this;
 		
 		FCMainClass.activeHomePage = 2;
-
+		
 		primaryStage = ps;
 		theRootPane = theRoot;
 		theDatabase = database;
 		theUser = user;
 		
-		double WINDOW_WIDTH = FCMainClass.WINDOW_WIDTH;	
-		
+		double WINDOW_WIDTH = FCMainClass.WINDOW_WIDTH;
+		double WINDOW_HEIGHT = FCMainClass.WINDOW_HEIGHT;
+
 		primaryStage.setTitle("CSE 360 Foundation Code: User Home Page");
 
 		// Label the window with the title and other common titles and buttons
@@ -105,6 +113,11 @@ public class GUIStudentHomePage {
         setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 540);
         button_Quit.setOnAction((event) -> {performQuit(); });
         
+        tblPosts.getColumns().setAll(colTitle, colPoster, colReplies, colQID);
+        tblPosts.setLayoutX(10);
+        tblPosts.setLayoutY(200);
+        tblPosts.setMinSize(WINDOW_WIDTH-20, WINDOW_HEIGHT-(20+tblPosts.getLayoutY()));
+        
         setup();
 	}
 
@@ -122,7 +135,7 @@ public class GUIStudentHomePage {
 			label_PageTitle, label_UserDetails, button_UpdateThisUser, line_Separator1,
 	        line_Separator4, 
 	        button_Logout,
-	        button_Quit
+	        button_Quit, tblPosts
 	    );
 			
 	}
