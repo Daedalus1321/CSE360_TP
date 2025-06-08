@@ -31,7 +31,8 @@ public class User {
     private boolean reviewerRole;
     private boolean instructorRole;
     private boolean staffRole;
- 
+    
+    
     /*****
      * <p> Method: User() </p>
      * 
@@ -41,23 +42,6 @@ public class User {
     	
     }
 
-    
-    /*****
-     * <p> Method: User(String username) </p>
-     * 
-     * <p> Description: This constructor is used to create a minimum-authorization anonymous user </p>
-     * 
-     * @param username is the 
-     */
-    public User(String username) {
-    	this.userName = username;
-        this.password = null;
-        this.adminRole = false;
-        this.studentRole = true;
-        this.reviewerRole = false;
-        this.instructorRole = false;
-        this.staffRole = false;
-    }
     
     /*****
      * <p> Method: User(String userName, String password, boolean r1, boolean r2,
@@ -93,8 +77,9 @@ public class User {
     }
     
  // Overloaded Constructor to initialize a new User object with all the details.
-    public User(String userName, String password, String firstName, String middleName, String lastName, String preferredFirstName, String emailAddress,  boolean r1, boolean r2, boolean r3, boolean r4,
+    public User(int id, String userName, String password, String firstName, String middleName, String lastName, String preferredFirstName, String emailAddress,  boolean r1, boolean r2, boolean r3, boolean r4,
     		boolean r5) {
+    	this.id = id;
         this.userName = userName;
         this.password = password;
         this.firstName = firstName;
@@ -109,7 +94,15 @@ public class User {
         this.staffRole = r5;
     }
     
-  
+    public User(String username) {
+    	this.userName = username;
+        this.password = null;
+        this.adminRole = false;
+        this.studentRole = true;
+        this.reviewerRole = false;
+        this.instructorRole = false;
+        this.staffRole = false;
+    }
 
     
     /*****
@@ -170,7 +163,18 @@ public class User {
     
     
     
-    
+    /*****
+     * <p> Method: void setID(int id ) </p>
+     * 
+     * <p> Description: This setter defines the Staff role attribute. </p>
+     * 
+     * @param role is a boolean that specifies if this user in playing the Staff role.
+     * 
+     */
+    // Sets the id.
+    public void setId(int id) {
+    	this.id = id;
+    }
     
     
     
@@ -239,7 +243,7 @@ public class User {
      * 
      */
     // Sets the role of the Staff user.
-    public void setlastName(String lastName) {
+    public void setLastName(String lastName) {
     	this.lastName = lastName;
     }
     
@@ -286,28 +290,7 @@ public class User {
     public void setStaffRole(boolean role) {
     	this.adminRole=role;
     }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
     
     /*****
      * <p> Method: String getAdminRole() </p>

@@ -1,6 +1,7 @@
 package guiPageClasses;
 
-	import java.util.ArrayList;
+	import java.sql.SQLException;
+import java.util.ArrayList;
 	import java.util.List;
 
 	import applicationMainMethodClasses.FCMainClass;
@@ -119,7 +120,12 @@ package guiPageClasses;
 			combobox_SelectRole.getSelectionModel().select(0);
 
 			setupButtonUI(button_PerformRole, "Dialog", 16, 100, Pos.CENTER, 495, 105);
-			button_PerformRole.setOnAction((event) -> {performRole(); });
+			button_PerformRole.setOnAction((event) -> {try {
+				performRole();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} });
 		
 			setupButtonUI(button_Logout, "Dialog", 18, 250, Pos.CENTER, 20, 540);
 			button_Logout.setOnAction((event) -> {performLogout(); });
@@ -220,10 +226,11 @@ package guiPageClasses;
 		/**********************************************************************************************
 
 		User Interface Actions for this page
+		 * @throws SQLException 
 		
 		**********************************************************************************************/
 
-		private void performRole () {
+		private void performRole () throws SQLException {
 	    	String role = combobox_SelectRole.getValue();
 			if (role.compareTo("Admin") == 0) {
 				if (GUISystemStartUpPage.theAdminHomePage == null)

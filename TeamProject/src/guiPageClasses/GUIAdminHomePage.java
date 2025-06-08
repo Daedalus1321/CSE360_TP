@@ -9,13 +9,20 @@ import java.util.Optional;
 //import java.util.Optional;
 
 import applicationMainMethodClasses.FCMainClass;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
 //
@@ -95,12 +102,15 @@ public class GUIAdminHomePage {
 	private ScrollPane scrollPane = new ScrollPane();
 	private Rectangle rect = new Rectangle(800,800);
 	
+	private TableView<User> userTable = new TableView<User>();
+	
 
 	
 	private Stage primaryStage;	
 	private Pane theRootPane;
 	private Database theDatabase;
 	private User theUser;
+
 
 
 	/**********************************************************************************************
@@ -124,10 +134,11 @@ public class GUIAdminHomePage {
 	 * @param database specifies the Database to be used by this GUI and it's methods
 	 * 
 	 * @param user specifies the User for this GUI and it's methods
+	 * @throws SQLException 
 	 * 
 	 */
 	@SuppressWarnings("unused")
-	public GUIAdminHomePage(Stage ps, Pane theRoot, Database database, User user) {
+	public GUIAdminHomePage(Stage ps, Pane theRoot, Database database, User user) throws SQLException {
 		GUISystemStartUpPage.theAdminHomePage = this;
 		
 		FCMainClass.activeHomePage = 1;
@@ -221,7 +232,8 @@ public class GUIAdminHomePage {
 		scrollPane.setPrefSize(480, 250);
 		scrollPane.setLayoutX(300);
 		scrollPane.setLayoutY(270);
-		scrollPane.setContent(rect);
+		buildTable();
+		scrollPane.setContent(userTable);
 		
 		// Place all of the items into the Root Pane
 		setup();
@@ -422,9 +434,47 @@ public class GUIAdminHomePage {
 	}
 	
 	
-	
-	
+	private void buildTable() throws SQLException {
+		
+	    ArrayList<User> userList = theDatabase.getUserListDetails();
+	    ObservableList<User> observableUserList = FXCollections.observableArrayList(userList);
 
+	    TableColumn<User, String> userName = new TableColumn<>("Username");
+	    TableColumn<User, String> name = new TableColumn<>("Name");
+	    TableColumn<User, String> email = new TableColumn<>("Email");
+	    TableColumn<User, Boolean> admin = new TableColumn<>("Admin");
+	    TableColumn<User, Boolean> student = new TableColumn<>("Student");
+	    TableColumn<User, Boolean> reviewer = new TableColumn<>("Reviewer");
+	    TableColumn<User, Boolean> instructor = new TableColumn<>("Instructor");
+	    TableColumn<User, Boolean> staff = new TableColumn<>("Staff");
+
+	    userName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getUserName()));
+	    name.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFirstName()));
+	    email.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmailAddress()));
+
+	    admin.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getAdminRole()));
+	    student.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getStudentRole()));
+	    reviewer.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getReviewerRole()));
+	    instructor.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getInstructorRole()));
+	    staff.setCellValueFactory(cellData -> new SimpleBooleanProperty(cellData.getValue().getStaffRole()));
+
+		
+		
+		userTable.getColumns().setAll(userName, name, email, admin, student, reviewer, instructor, staff);
+		
+		
+		userTable.setItems(observableUserList);
+		
+
+		
+		
+	}
+	
+	
+	
+	
+	
+	
 	
 	
 	

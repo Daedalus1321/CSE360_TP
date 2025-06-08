@@ -590,25 +590,40 @@ public class Database {
 
 	
 	
-//	private void makeUserListx() {
-//		
-//		String query = "SELECT * FROM userTable";
-//		ArrayList<User> userList = new ArrayList<>();
-//		
-//		
-//		try(PreparedStatement pstmt = connection.prepareStatement(query)) {			
-//			ResultSet rs = pstmt.executeQuery();
-//			while (rs.next()) {
-//				User newUser = new User();
-//				 = rs.getString("userName");
-//				
-//			}
-//		}
-//	}
-//   
+	public ArrayList<User> getUserListDetails() throws SQLException {
+		
+		String query = "SELECT * FROM userDB";
+		ArrayList<User> userList = new ArrayList<>();
+		
+		
+		try(PreparedStatement pstmt = connection.prepareStatement(query)) {			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				User newUser = new User();
+				
+				newUser.setId(rs.getInt("id"));
+				newUser.setUserName(rs.getString("userName"));
+				newUser.setPassword(rs.getString("password"));
+				newUser.setFirstName(rs.getString("firstName"));
+				newUser.setMiddleName(rs.getString("middleName"));
+				newUser.setLastName(rs.getString("LastName"));
+				newUser.setPreferredFirstName(rs.getString("preferredFirstName"));
+				newUser.setEmailAddress(rs.getString("EmailAddress"));
+				newUser.setAdminRole(rs.getBoolean("adminRole"));
+				newUser.setStudentRole(rs.getBoolean("studentRole"));
+				newUser.setReviewerRole(rs.getBoolean("reviewerRole"));
+				newUser.setInstructorRole(rs.getBoolean("instructorRole"));
+				newUser.setStaffRole(rs.getBoolean("staffRole"));
+				
+				userList.add(newUser);	
+			}
+			
+			return userList;
+		}
+	}
+   
     
-    
-    
+
     
     
     

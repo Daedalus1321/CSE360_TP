@@ -1,5 +1,6 @@
 package guiPageClasses;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 import applicationMainMethodClasses.FCMainClass;
@@ -201,7 +202,12 @@ public class GUIUserUpdatePage {
         
         setupButtonUI(button_ProceedToUserHomePage, "Dialog", 18, 300, 
         		Pos.CENTER, WINDOW_WIDTH/2-150, 450);
-        button_ProceedToUserHomePage.setOnAction((event) -> {goToUserHomePage();});
+        button_ProceedToUserHomePage.setOnAction((event) -> {try {
+			goToUserHomePage();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}});
         
         
 		String newName = theDatabase.getCurrentUsername();
@@ -308,11 +314,12 @@ public class GUIUserUpdatePage {
 	/**********************************************************************************************
 
 	User Interface Actions for this page
+	 * @throws SQLException 
 	
 	**********************************************************************************************/
 	
 
-	private void goToUserHomePage() {
+	private void goToUserHomePage() throws SQLException {
 		theRootPane.getChildren().clear();
 		switch (FCMainClass.activeHomePage) {
 		case 1:
