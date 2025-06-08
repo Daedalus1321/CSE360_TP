@@ -2,6 +2,9 @@ package guiPageClasses;
 
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.sql.SQLException;
+
 import databaseClasses.Database;
 import entityClasses.User;
 
@@ -71,9 +74,10 @@ public class GUISingleRoleDispatch {
 	 * @param database specifies the Database to be used by this GUI and it's methods
 	 * 
 	 * @param user specifies the User for this GUI and it's methods
+	 * @throws SQLException 
 	 * 
 	 */
-	public void doSingleRoleDispatch(Stage ps, Pane theRoot, Database database, User user) {
+	public void doSingleRoleDispatch(Stage ps, Pane theRoot, Database database, User user) throws SQLException {
 		primaryStage = ps;
 		theRootPane = theRoot;
 		theDatabase = database;

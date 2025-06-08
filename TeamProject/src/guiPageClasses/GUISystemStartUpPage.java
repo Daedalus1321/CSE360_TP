@@ -348,7 +348,12 @@ public class GUISystemStartUpPage {
          
         // Set up the Log In button
         setupButtonUI(button_Login, "Dialog", 18, 200, Pos.CENTER, 475, 180);
-            button_Login.setOnAction((event) -> {doLogin(); });
+            button_Login.setOnAction((event) -> {try {
+				doLogin();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} });
             
         alertUsernamePasswordError.setTitle("Invalid username/password!");
         alertUsernamePasswordError.setHeaderText(null);
@@ -473,7 +478,7 @@ public class GUISystemStartUpPage {
 		}
 	}
 	
-	private void doLogin() {		
+	private void doLogin() throws SQLException {		
 		String username = text_Username.getText();
 		String password = text_Password.getText();
     	Boolean user_pass_valid = CheckUserPass.checkUserPass(username, password);
