@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -86,7 +87,6 @@ public class GUIAdminHomePage {
 	private Button button_ManageInvitations = new Button("Manage Invitations");
 	private Button button_SetOnetimePassword = new Button("Set a One-Time Password");
 	private Button button_DeleteUser = new Button("Delete a User");
-	private ComboBox <String> combobox_DeleteUser = new ComboBox <String>();
 	private Alert alertVerifyDelete = new Alert(AlertType.INFORMATION);
 	private Button button_ListUsers = new Button("List All Users");
 	private Button button_AddRemoveRoles = new Button("Add/Remove Roles");
@@ -207,32 +207,33 @@ public class GUIAdminHomePage {
 
 		
 //		
+		buildTable();
 		
-		
-		setupComboBoxUI(combobox_DeleteUser, "Dialog", 16, 250, 20, 370);
+		//setupComboBoxUI(combobox_DeleteUser, "Dialog", 16, 250, 20, 370);
 		
 		List<String> userList = theDatabase.getUserList();
 		
-		combobox_DeleteUser.setItems(FXCollections.observableArrayList(userList));
-		combobox_DeleteUser.getSelectionModel().select(0);
+
 		alertVerifyDelete.setTitle("Confirm deletion?");
 		alertVerifyDelete.setHeaderText("Are you sure you want to delete this user?");
 		
-		setupButtonUI(button_DeleteUser, "Dialog", 16, 250, Pos.CENTER, 320, 370);
+		setupButtonUI(button_DeleteUser, "Dialog", 16, 250, Pos.CENTER, 20,420);
 		button_DeleteUser.setOnAction((event) -> {deleteUser(); });
 
-		setupButtonUI(button_ListUsers, "Dialog", 16, 250, Pos.CENTER, 20, 420);
-		button_ListUsers.setOnAction((event) -> {listUser(); });
+//		setupButtonUI(button_ListUsers, "Dialog", 16, 250, Pos.CENTER, 20, 420);
+//		button_ListUsers.setOnAction((event) -> {listUser(); });
 
 		setupButtonUI(button_AddRemoveRoles, "Dialog", 16, 250, Pos.CENTER, 20, 470);
 		button_AddRemoveRoles.setOnAction((event) -> {addRemoveRoles(); });
+		
+		
 		
 		
 		rect.setFill(Color.RED);
 		scrollPane.setPrefSize(480, 250);
 		scrollPane.setLayoutX(300);
 		scrollPane.setLayoutY(270);
-		buildTable();
+		
 		scrollPane.setContent(userTable);
 		
 		// Place all of the items into the Root Pane
@@ -259,7 +260,7 @@ public class GUIAdminHomePage {
     		button_ManageInvitations,
     		button_SetOnetimePassword,
     		button_DeleteUser,
-    		combobox_DeleteUser,
+
     		button_ListUsers,
     		button_AddRemoveRoles,
     		scrollPane,
@@ -395,42 +396,82 @@ public class GUIAdminHomePage {
 	}
 		
 	private void deleteUser() {
-		try {
-			String user = (String) combobox_DeleteUser.getValue();
-			boolean isAdmin = isAdmin(user);
-						
-			String message = String.format("Are you sure you want to delete user %s", user);
-			alertVerifyDelete.setContentText(message);
-			Optional<ButtonType> result = alertVerifyDelete.showAndWait();
-			
-			if (user == "<Select a User>") {
-				return;
-			}
-			
-			if (result.isPresent() && result.get() == ButtonType.OK) {
-				 if (isAdmin) {
-					theDatabase.updateUserRole(user, "Student", "False");
-					theDatabase.updateUserRole(user, "Reviewer", "False");
-					theDatabase.updateUserRole(user, "Instructor", "False");
-					theDatabase.updateUserRole(user, "Staff", "False");	
-					System.out.println("Roles other than Admin removed from user. Cannot delete admins.");
-				} else {
-					if (theDatabase.deleteUser(user) == true) {
-						List<String> userList = theDatabase.getUserList();
-						combobox_DeleteUser.setItems(FXCollections.observableArrayList(userList));
-						combobox_DeleteUser.getSelectionModel().select(0);
-						System.out.println("The user has been deleted.");
-					} else {
-						System.out.println("Couldn't delete.");				
-					}
-				}
-			} 
-					
-	
-		} catch (Exception e) {
-			
-		}
-
+	    try {
+	        // Get the selected user from the table
+	        User selectedUser = userTable.getSelectionModel().getSelectedItem();
+	        
+	        // Check if a user is selected
+	        if (selectedUser == null) {
+	            Alert noSelectionAlert = new Alert(AlertType.WARNING);
+	            noSelectionAlert.setTitle("No Selection");
+	            noSelectionAlert.setHeaderText("No User Selected");
+	            noSelectionAlert.setContentText("Please select a user from the table to delete.");
+	            noSelectionAlert.showAndWait();
+	            return;
+	        }
+	        
+	        String username = selectedUser.getUserName();
+	        boolean isAdmin = isAdmin(username);
+	        
+	        String message = String.format("Are you sure you want to delete user %s?", username);
+	        alertVerifyDelete.setContentText(message);
+	        Optional<ButtonType> result = alertVerifyDelete.showAndWait();
+	        
+	        if (result.isPresent() && result.get() == ButtonType.OK) {
+	            if (isAdmin) {
+	                // Remove all roles except Admin for admin users
+	                theDatabase.updateUserRole(username, "Student", "False");
+	                theDatabase.updateUserRole(username, "Reviewer", "False");
+	                theDatabase.updateUserRole(username, "Instructor", "False");
+	                theDatabase.updateUserRole(username, "Staff", "False");    
+	                System.out.println("Roles other than Admin removed from user. Cannot delete admins.");
+	                
+	                // Show info alert about admin protection
+	                Alert adminProtectionAlert = new Alert(AlertType.INFORMATION);
+	                adminProtectionAlert.setTitle("Admin Protection");
+	                adminProtectionAlert.setHeaderText("Cannot Delete Admin User");
+	                adminProtectionAlert.setContentText("Admin users cannot be deleted. Other roles have been removed.");
+	                adminProtectionAlert.showAndWait();
+	                
+	            } else {
+	                // Delete non-admin user
+	                if (theDatabase.deleteUser(username)) {
+	                    System.out.println("The user has been deleted.");
+	                    
+	                    // Show success message
+	                    Alert successAlert = new Alert(AlertType.INFORMATION);
+	                    successAlert.setTitle("User Deleted");
+	                    successAlert.setHeaderText("Success");
+	                    successAlert.setContentText("User " + username + " has been successfully deleted.");
+	                    successAlert.showAndWait();
+	                    
+	                } else {
+	                    System.out.println("Couldn't delete user.");
+	                    
+	                    // Show error message
+	                    Alert errorAlert = new Alert(AlertType.ERROR);
+	                    errorAlert.setTitle("Deletion Failed");
+	                    errorAlert.setHeaderText("Error");
+	                    errorAlert.setContentText("Failed to delete user " + username + ". Please try again.");
+	                    errorAlert.showAndWait();
+	                }
+	            }
+	            
+	            // Refresh the table and update user count regardless of outcome
+	            buildTable();
+	            int numberOfUsers = theDatabase.getNumberOfUsers();
+	            label_NumberOfUsers.setText("Number of users: " + numberOfUsers);
+	        }
+	        
+	    } catch (Exception e) {
+	        // Handle any unexpected errors
+	        Alert errorAlert = new Alert(AlertType.ERROR);
+	        errorAlert.setTitle("Unexpected Error");
+	        errorAlert.setHeaderText("An error occurred");
+	        errorAlert.setContentText("An unexpected error occurred while trying to delete the user: " + e.getMessage());
+	        errorAlert.showAndWait();
+	        e.printStackTrace();
+	    }
 	}
 	
 	
@@ -465,7 +506,7 @@ public class GUIAdminHomePage {
 		
 		userTable.setItems(observableUserList);
 		
-
+		userTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		
 		
 	}
