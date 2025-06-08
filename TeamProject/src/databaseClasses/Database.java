@@ -123,6 +123,12 @@ public class Database {
 	    		+ "emailAddress VARCHAR(255), "
 	            + "role VARCHAR(10))";
 	    statement.execute(invitationCodesTable);
+	    
+	    String postsTable = "CREATE TABLE IF NOT EXISTS posts ("
+	    		+ "userName VARCHAR(255),"
+	    		+ "content VARCHAR(MAX)"
+	    		+ ")";
+	    statement.execute(postsTable);
 	}
 
 
