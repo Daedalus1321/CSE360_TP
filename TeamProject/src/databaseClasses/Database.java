@@ -128,7 +128,7 @@ public class Database {
 			    + "used BOOLEAN DEFAULT FALSE, "
 			    + "used_date TIMESTAMP NULL"
 			    + ")";
-			statement.execute(invitationCodesTable);
+		statement.execute(invitationCodesTable);
 	}
 
 
