@@ -1,10 +1,13 @@
 package guiPageClasses;
 
+import java.util.ArrayList;
+
 import applicationMainMethodClasses.FCMainClass;
 import crud.*;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
@@ -52,11 +55,9 @@ public class GUIStudentHomePage {
 	private User theUser;
 	
 	private TableView<Question> tblPosts = new TableView<>();
-	private TableColumn<Question, String> colTitle = new TableColumn<>("Title");
-	private TableColumn<Question, String> colPoster = new TableColumn<>("Poster");
-	private TableColumn<Question, Integer> colReplies = new TableColumn<>("# Replies");
-	private TableColumn<Question, String> colQID = new TableColumn<>("QID");
 
+	
+	
 	/**********************************************************************************************
 
 	Constructors
@@ -113,7 +114,21 @@ public class GUIStudentHomePage {
         setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 540);
         button_Quit.setOnAction((event) -> {performQuit(); });
         
-        tblPosts.getColumns().setAll(colTitle, colPoster, colReplies, colQID);
+        
+    	TableColumn<Question, String> colTitle = new TableColumn<>("Title");
+    	TableColumn<Question, String> colPoster = new TableColumn<>("Poster");
+    	TableColumn<Question, Integer> colNumReplies = new TableColumn<>("# Replies");
+    	TableColumn<Question, String> colQID = new TableColumn<>("QID");
+        
+    	//ArrayList<Questions> userList = theDatabase.getUserListDetails();
+    	//ObservableList<Question> observableUserList = FXCollections.observableArrayList(userList);
+    	
+        colTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        colPoster.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        //colNumReplies.setCellValueFactory(cellData --> new SimpleIntegerProperty(cellData.getValue().getNumReplies()));
+        colQID.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        
+        tblPosts.getColumns().setAll(colTitle, colPoster, colNumReplies, colQID);
         tblPosts.setLayoutX(10);
         tblPosts.setLayoutY(200);
         tblPosts.setMinSize(WINDOW_WIDTH-20, WINDOW_HEIGHT-(20+tblPosts.getLayoutY()));

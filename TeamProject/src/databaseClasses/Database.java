@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import crud.Question;
 import entityClasses.User;
 
 /*******
@@ -123,6 +124,18 @@ public class Database {
 	    		+ "emailAddress VARCHAR(255), "
 	            + "role VARCHAR(10))";
 	    statement.execute(invitationCodesTable);
+	    
+	 // Create the poststable
+	    String postsTable = "CREATE TABLE IF NOT EXISTS Posts ("
+	            + "title VARCHAR(255), " 
+	    		+ "content VARCHAR(MAX), "
+	            + "poster VARCHAR(255)"
+	            + "keywords VARCHAR(255)"
+	            + "replyRIDS VARCHAR(MAX)"
+	            + "numReplies VARCHAR(10)"
+	            + "QID VARCHAR(255)"
+	            + ")";
+	    statement.execute(postsTable);
 	}
 
 
@@ -587,8 +600,32 @@ public class Database {
 //		return userList;
 //	}
 	
-
-	
+/*
+public ArrayList<Question> getQuestionListDetails() throws SQLException {
+		
+		String query = "SELECT * FROM Posts";
+		ArrayList<Question> questionList = new ArrayList<>();
+		
+		
+		try(PreparedStatement pstmt = connection.prepareStatement(query)) {			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				
+				Question Q = new Question(rs.getString("title"),rs.getString("content"),rs.getString("user"));
+				
+				Q.setID(rs.getString("id"));
+				Q.set
+				newUser.setId(rs.getInt("id"));
+				newUser.setUserName(rs.getString("userName"));
+				newUser.setStaffRole(rs.getBoolean("staffRole"));
+				
+				questionList.add(Q);	
+			}
+			
+			return questionList;
+		}
+	}
+	*/
 	
 	public ArrayList<User> getUserListDetails() throws SQLException {
 		
