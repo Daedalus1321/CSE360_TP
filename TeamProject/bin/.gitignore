@@ -1,2 +1,5 @@
-/bin/
-*.class
+/crud/
+/databaseClasses/
+/entityClasses/
+/guiPageClasses/
+/testing/
