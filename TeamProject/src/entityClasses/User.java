@@ -455,7 +455,3 @@ public class User {
     	return numRoles;
     }
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> refs/heads/Asher
