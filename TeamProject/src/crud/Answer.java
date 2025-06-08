@@ -29,7 +29,8 @@ public class Answer {
 	private String replyContent="";
 	private String[] keywords = new String[0];
 	
-	
+	public Answer(){
+	}
 	
 	/**
 	 * <p> Method: Answer(Question q)</p>

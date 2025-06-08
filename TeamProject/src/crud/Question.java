@@ -115,6 +115,9 @@ public class Question {
 		nextReply++;
 	}
 	
+	public Answer getReply(int index){
+		return replies[index];
+	}
 	
 	/** <p> Method: resizeReplies(int newsize)</p>
 	 * <p> Description: helper method to resize array to add new replies</p>

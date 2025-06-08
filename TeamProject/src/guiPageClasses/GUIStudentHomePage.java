@@ -212,6 +212,19 @@ public class GUIStudentHomePage {
 			
 	}
 	
+	public void updateReplies(GenericQuestion GQ){
+		GenericAnswer GA = new GenericAnswer();
+		Answer A = new Answer();
+		Question Q = CSE360.getQuestion(GQ.getQID());
+		
+		for(int i = 0; i < Q.getNumReplies(); i++){
+			A = Q.getReply(i);
+			GA = new GenericAnswer(A.getMarkedAnswer(), A.getPoster().getUserName(), A.getContent(), GQ.getQID(), A.getRID());
+			
+			tblReplies.getItems().add(GA);
+		}
+	}
+	
 	/**********
 	 * Private local method to initialize the standard fields for a label
 	 */
