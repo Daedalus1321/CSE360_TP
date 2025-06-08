@@ -3,8 +3,6 @@ package guiPageClasses;
 import applicationMainMethodClasses.FCMainClass;
 import crud.*;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
@@ -52,10 +50,7 @@ public class GUIStudentHomePage {
 	private User theUser;
 	
 	private TableView<Question> tblPosts = new TableView<>();
-	private TableColumn<Question, String> colTitle = new TableColumn<>("Title");
-	private TableColumn<Question, String> colPoster = new TableColumn<>("Poster");
-	private TableColumn<Question, Integer> colReplies = new TableColumn<>("# Replies");
-	private TableColumn<Question, String> colQID = new TableColumn<>("QID");
+	
 
 	/**********************************************************************************************
 
@@ -113,11 +108,20 @@ public class GUIStudentHomePage {
         setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 540);
         button_Quit.setOnAction((event) -> {performQuit(); });
         
+        TableColumn<Question, String> colTitle = new TableColumn<>("Title");
+    	TableColumn<Question, String> colPoster = new TableColumn<>("Poster");
+    	TableColumn<Question, Integer> colReplies = new TableColumn<>("# Replies");
+    	TableColumn<Question, String> colQID = new TableColumn<>("QID");
+        
         tblPosts.getColumns().setAll(colTitle, colPoster, colReplies, colQID);
         tblPosts.setLayoutX(10);
         tblPosts.setLayoutY(200);
         tblPosts.setMinSize(WINDOW_WIDTH-20, WINDOW_HEIGHT-(20+tblPosts.getLayoutY()));
         
+        tblPosts.resizeColumn(colTitle, 400);
+        tblPosts.resizeColumn(colPoster, 80);
+        tblPosts.resizeColumn(colReplies, 40);
+        tblPosts.resizeColumn(colQID, 40);
         setup();
 	}
 

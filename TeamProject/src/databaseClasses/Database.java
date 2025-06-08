@@ -792,7 +792,7 @@ public class Database {
 	        ResultSet rs = pstmt.executeQuery();
 	        
 	        if (rs.next()) {
-	            return rs.getString("firstName"); // Return last name role if user exists
+	            return rs.getString("lastName"); // Return last name role if user exists
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
