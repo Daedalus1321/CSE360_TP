@@ -1,10 +1,18 @@
 package guiPageClasses;
 
+import java.util.ArrayList;
+
 import applicationMainMethodClasses.FCMainClass;
 import crud.*;
+<<<<<<< HEAD
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+=======
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+>>>>>>> refs/heads/Asher
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
@@ -53,6 +61,7 @@ public class GUIStudentHomePage {
 	private Database theDatabase;
 	private User theUser;
 	
+<<<<<<< HEAD
 	private TableView<GenericQuestion> tblPosts = new TableView<>();
 	private TableView<GenericAnswer> tblReplies = new TableView<>();
 	
@@ -62,6 +71,11 @@ public class GUIStudentHomePage {
 	private TextField text_post = new TextField();
 	private TextField text_keywords = new TextField();
 	private TextField text_title = new TextField();
+=======
+	private TableView<Question> tblPosts = new TableView<>();
+
+	
+>>>>>>> refs/heads/Asher
 	
 	/**********************************************************************************************
 
@@ -120,6 +134,7 @@ public class GUIStudentHomePage {
         setupButtonUI(button_Quit, "Dialog", 18, 250, Pos.CENTER, 300, 540);
         button_Quit.setOnAction((event) -> {performQuit(); });
         
+<<<<<<< HEAD
         setupButtonUI(button_Post, "Dialog", 18, 50, Pos.BASELINE_LEFT, 20, 150);
         button_Post.setOnAction((event) -> {post(text_title.getText(), text_post.getText()); });
         
@@ -138,6 +153,23 @@ public class GUIStudentHomePage {
     	colQID.setCellValueFactory( cellData -> new SimpleStringProperty(cellData.getValue().getQID()));
     	
         tblPosts.getColumns().addAll(colTitle, colPoster, colReplies, colQID);
+=======
+        
+    	TableColumn<Question, String> colTitle = new TableColumn<>("Title");
+    	TableColumn<Question, String> colPoster = new TableColumn<>("Poster");
+    	TableColumn<Question, Integer> colNumReplies = new TableColumn<>("# Replies");
+    	TableColumn<Question, String> colQID = new TableColumn<>("QID");
+        
+    	//ArrayList<Questions> userList = theDatabase.getUserListDetails();
+    	//ObservableList<Question> observableUserList = FXCollections.observableArrayList(userList);
+    	
+        colTitle.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        colPoster.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        //colNumReplies.setCellValueFactory(cellData --> new SimpleIntegerProperty(cellData.getValue().getNumReplies()));
+        colQID.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTitle()));
+        
+        tblPosts.getColumns().setAll(colTitle, colPoster, colNumReplies, colQID);
+>>>>>>> refs/heads/Asher
         tblPosts.setLayoutX(10);
         tblPosts.setLayoutY(200);
         tblPosts.setMinSize(WINDOW_WIDTH-20, 150);

@@ -28,10 +28,11 @@ public class Question {
 	private String postContent="[no content]";
 	private String[] keywords = new String[0];
 	
-	private int numreplies = 0;
+	private Integer numreplies = 0;
 	private int nextReply = 0;
 	private Answer[] replies = new Answer[1];
 	
+	public Question(){}
 	
    /** <p> Method: Question()</p>
 	 * <p> Description: Default constructor for creating the question</p>
@@ -62,7 +63,7 @@ public class Question {
 	public User getPoster(){return postUser;}
 	public String[] getKeywords(){return keywords;}
 	public Answer[] getReplies(){return replies;}
-	public int getNumReplies(){return numreplies;}
+	public Integer getNumReplies(){return numreplies;}
 	public int getNextReply(){return nextReply;}
 	public String getQID(){return QID;}
 	

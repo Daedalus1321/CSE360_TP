@@ -4,7 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import entityClasses.User;
 
 /*******
@@ -118,6 +117,7 @@ public class Database {
 		statement.execute(userTable);
 		
 		// Create the invitation codes table
+<<<<<<< HEAD
 		String invitationCodesTable = "CREATE TABLE IF NOT EXISTS InvitationCodes ("
 			    + "id INTEGER PRIMARY KEY AUTOINCREMENT, "
 			    + "code VARCHAR(10) UNIQUE NOT NULL, "
@@ -129,6 +129,25 @@ public class Database {
 			    + "used_date TIMESTAMP NULL"
 			    + ")";
 		statement.execute(invitationCodesTable);
+=======
+	    String invitationCodesTable = "CREATE TABLE IF NOT EXISTS InvitationCodes ("
+	            + "code VARCHAR(10) PRIMARY KEY, "
+	    		+ "emailAddress VARCHAR(255), "
+	            + "role VARCHAR(10))";
+	    statement.execute(invitationCodesTable);
+	    
+	 // Create the poststable
+	    String postsTable = "CREATE TABLE IF NOT EXISTS Posts ("
+	            + "title VARCHAR(255), " 
+	    		+ "content VARCHAR(MAX), "
+	            + "poster VARCHAR(255)"
+	            + "keywords VARCHAR(255)"
+	            + "replyRIDS VARCHAR(MAX)"
+	            + "numReplies VARCHAR(10)"
+	            + "QID VARCHAR(255)"
+	            + ")";
+	    statement.execute(postsTable);
+>>>>>>> refs/heads/Asher
 	}
 
 
@@ -648,8 +667,32 @@ public class Database {
 //		return userList;
 //	}
 	
-
-	
+/*
+public ArrayList<Question> getQuestionListDetails() throws SQLException {
+		
+		String query = "SELECT * FROM Posts";
+		ArrayList<Question> questionList = new ArrayList<>();
+		
+		
+		try(PreparedStatement pstmt = connection.prepareStatement(query)) {			
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+				
+				Question Q = new Question(rs.getString("title"),rs.getString("content"),rs.getString("user"));
+				
+				Q.setID(rs.getString("id"));
+				Q.set
+				newUser.setId(rs.getInt("id"));
+				newUser.setUserName(rs.getString("userName"));
+				newUser.setStaffRole(rs.getBoolean("staffRole"));
+				
+				questionList.add(Q);	
+			}
+			
+			return questionList;
+		}
+	}
+	*/
 	
 	public ArrayList<User> getUserListDetails() throws SQLException {
 		
