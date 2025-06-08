@@ -59,6 +59,9 @@ public class GUIStudentHomePage {
 	private QuestionList CSE360 = new QuestionList("CSE360");
 	private AnswerList CSE360_a = new AnswerList("");
 	
+	private TextField text_post = new TextField();
+	private TextField text_keywords = new TextField();
+	
 	/**********************************************************************************************
 
 	Constructors
