@@ -3,18 +3,29 @@ package crud;
 public class GenericQuestion {
 	private String title;
 	private String poster;
+	public String content;
 	private Integer numreplies;
 	private String QID;
 
 	public GenericQuestion(){
 		title = "";
 		poster = "";
+		content = "";
 		numreplies = 0;
 		QID = "";
 	}
 	
-    public GenericQuestion(String title, String poster, Integer numreplies, String QID) {
+    public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public GenericQuestion(String title, String content, String poster, Integer numreplies, String QID) {
         this.title = title;
+        this.content = content;
         this.poster = poster;
         this.numreplies = numreplies;
         this.QID = QID;

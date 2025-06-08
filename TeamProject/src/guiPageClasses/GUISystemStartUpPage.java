@@ -314,7 +314,7 @@ public class GUISystemStartUpPage {
 		theRootPane.getChildren().addAll(
 				label_ApplicationTitle, label_OperationalStartTitle,
 				label_LogInInsrtuctions, label_AccountSetupInsrtuctions, text_Username,
-				button_Login, text_Password, text_Invitation, button_SetupAccount,
+				text_Password, button_Login, text_Invitation, button_SetupAccount,
 				button_Quit);
 	}
 
@@ -456,7 +456,7 @@ public class GUISystemStartUpPage {
         	// Create the passwords and proceed to the user home page
             try {
             	// Create a new User object with admin role and register in the database
-            	User user = new User(adminUsername, adminPassword1, true, false, false, false, false);
+            	User user = new User(adminUsername, adminPassword1, true, true, true, true, true);
                 database.register(user);
                 System.out.println("Administrator Username and Password have been set.");
                 

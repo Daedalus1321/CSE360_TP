@@ -30,6 +30,7 @@ public class Answer {
 	private String[] keywords = new String[0];
 	
 	public Answer(){
+		this.RID = "r";
 	}
 	
 	/**

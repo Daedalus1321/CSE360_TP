@@ -116,6 +116,10 @@ public class Question {
 	}
 	
 	public Answer getReply(int index){
+		if(index-1 > numreplies){
+			return new Answer();
+		}
+		
 		return replies[index];
 	}
 	
