@@ -22,7 +22,7 @@ import javafx.scene.layout.Pane;
  * 
  * @author Lynn Robert Carter
  * 
- * @version 2.00	2025-04-120 Refactor of this Main Class for the Summer 2025 offering of CSE 360
+ * @version 2.0
  */
 
 public class FCMainClass extends Application {
