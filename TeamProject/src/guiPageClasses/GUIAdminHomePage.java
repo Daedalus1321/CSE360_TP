@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 //import java.util.Optional;
 
@@ -377,11 +379,38 @@ public class GUIAdminHomePage {
 		alertNotImplemented.showAndWait();
 	}
 	
+	
+	/*******
+	 * <p> Method: String generateOneTimePassword() </p>
+	 * 
+	 * <p> Description: This method generates a One Time Password for a user who 
+	 * has forgotten their password.</p>
+	 * 
+	 * <p>@return the code of six characters + an uppercase letter + symbol so the
+	 *  new user can use it to securely setup an account.</p>
+	 * 
+	 */
+	// Generates a new One Time Password.
+	public String generateOneTimePassword() {
+	    String uuid = UUID.randomUUID().toString().substring(0, 6); // Generate a random 6-character code
+	    Random random = new Random();
+	    char uppercaseLetter = (char) ('A' + random.nextInt(26));
+	    String symbols = "-_";
+	    char symbol = symbols.charAt(random.nextInt(symbols.length()));
+	    String code = uuid + uppercaseLetter + symbol;
+	    return code;
+	}
+
+	
+	
+	
 	private void setOnetimePassword () {
-		System.out.println("\n*** WARNING ***: One-Time Password Not Yet Implemented");
-		alertNotImplemented.setTitle("*** WARNING ***");
-		alertNotImplemented.setHeaderText("One-Time Password Issue");
-		alertNotImplemented.setContentText("One-Time Password Not Yet Implemented");
+		String oneTimePassword = generateOneTimePassword();
+		System.out.println("One-Time Password Set");
+//		System.out.println("\n*** WARNING ***: One-Time Password Not Yet Implemented");
+		alertNotImplemented.setTitle("*** One-Time Password Generated ***");
+		alertNotImplemented.setHeaderText(oneTimePassword);
+		alertNotImplemented.setContentText("New Password required after use.");
 		alertNotImplemented.showAndWait();
 	}
 	

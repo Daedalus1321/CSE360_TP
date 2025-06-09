@@ -110,8 +110,8 @@ public class FCMainClass extends Application {
 			databaseInUse.setTitle("*** ERROR ***");
 			databaseInUse.setHeaderText("Database Is Already Being Used");
 			databaseInUse.setContentText("Please stop the other instance and try again!");
-			databaseInUse.showAndWait();
-			System.exit(0);
+			//databaseInUse.showAndWait();
+			//System.exit(0);
 		} 
 
 		// Establish the GUI for the for the very first use
