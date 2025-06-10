@@ -2,7 +2,6 @@ package testing;
 import crud.*;
 import entityClasses.User;
 import validation.CheckUserPass;
-
 import java.util.Scanner;
 
 public class ExamplePost {
@@ -66,7 +65,7 @@ public class ExamplePost {
 				reply();
 			} else if(choice == 'u'){
 				System.out.println("\n===Updating post===");
-				//update();
+				update();
 			} else if(choice == 'd'){
 				System.out.println("\n===Deleting post===");
 				delete();
@@ -82,7 +81,86 @@ public class ExamplePost {
 	}
 	
 	/** <p> Method: reply()</p>
-	 * <p> Description: allows user to delete a post</p>
+	 * <p> Description: allows user to reply to a post</p>
+	*/
+	public static void update(){
+		boolean update = false;
+		int count = 0;
+		
+		System.out.println("Your posts: ");
+		System.out.println("---------------------------------");
+		for(int i = 0; i < CSE360.getLength(); i++){
+			Question Q = CSE360.getQindex(i);
+			
+			if(Q.getPoster().equals(currentUser)){
+				System.out.println("\t" + Q.getTitle() + " (ID: " + Q.getQID() + ")");
+				count++;
+			}
+		}
+		
+		if(count == 0){
+			System.out.println("\tYou have no posts!");
+			System.out.println("---------------------------------\n");
+			return;
+		}
+		
+		System.out.println("---------------------------------\n");
+		
+		System.out.print("Enter a valid post id or # to leave: ");
+		String QID = userInput.nextLine();
+		
+		Question Q;
+		
+		while (true){
+			if(QID.contains("#")){
+				break;
+			}
+			
+			Q = CSE360.getQuestion(QID);
+			
+			if(Q == null){
+				System.out.println("Enter a valid post id:");
+				QID = userInput.nextLine();
+			} else {
+				System.out.println("[Question Found!]");
+				break;
+			}
+		}
+		
+		String postContent = "";
+		
+		while(!update){
+			System.out.println("Enter your update, enter '#' to post:");
+			int lines = 0;
+			
+			while(true){
+				String line = userInput.nextLine();
+				
+				if(line.length() < 1 || line.charAt(0) == '#'){
+					break; 
+				 }
+				
+				if(lines > 0){
+					postContent += "\n";
+				}
+				postContent += line;
+				lines++;
+			}
+			if(postContent.length() < 20){
+				System.out.println("Error: Update must have more than 10 characters");
+			} else {
+				update = true;
+			}
+		}
+		
+		CSE360.update(QID, postContent, currentUser);
+		System.out.println("\n[POST UPDATED!]");
+	}
+	
+	
+	
+	/** <p> Method: reply()</p>
+	 * <p> Description: allows user to reply to a post</p>
 	*/
 	public static void reply(){
 		
@@ -128,6 +206,8 @@ public class ExamplePost {
 		
 		String replyContent = "";
 		
+		
+		//Tests validity of 
 		while(!reply){
 			System.out.println("Enter your reply, enter '#' to post:");
 			int lines = 0;
@@ -153,7 +233,7 @@ public class ExamplePost {
 		}
 		
 		CSE360.reply(QID, replyContent, currentUser);
-		System.out.println("[REPLY POSTED!]");
+		System.out.println("\n[REPLY POSTED!]");
 	}
 	
 	
@@ -164,6 +244,7 @@ public class ExamplePost {
 		
 		int count = 0;
 		
+		//Prints out user posts
 		System.out.println("Your posts: ");
 		System.out.println("---------------------------------");
 		for(int i = 0; i < CSE360.getLength(); i++){
@@ -175,6 +256,7 @@ public class ExamplePost {
 			}
 		}
 		
+		//Display error if no posts to delete
 		if(count == 0){
 			System.out.println("\tYou have no posts!");
 			System.out.println("---------------------------------\n");
@@ -186,6 +268,7 @@ public class ExamplePost {
 		System.out.print("Enter a valid post id or # to leave: ");
 		String QID = userInput.nextLine();
 		
+		//Tests validity of QID, or exits if #
 		while (true){
 			if(QID.contains("#")){
 				break;
@@ -303,50 +386,5 @@ public class ExamplePost {
 			}
 		}
 		return pick;
-	}
-	
-	/**
-	 * <p> Method: test()</p>
-	 * 
-	 * <p> Prints a test with </p>
-	 */
-	public static void test(){
-		
-		User testUser = new User("testUser");
-		
-		String id1 = CSE360.post("Test Post One", "This is a test post", testUser);
-		String id2 = CSE360.post("Help with getters", "How do getter functions work?", testUser);
-		String id3 = CSE360.post("I HATE YOU ALL", "You guys suck", new User("Anon"));
-		
-		CSE360.reply(id1, "test reply", testUser);
-		
-		String r2 = CSE360.reply(id2, "It's obvious to me, get good", new User("Anon"));
-		CSE360.reply(id2, "They're public methods to return private values!", testUser);
-		
-		System.out.println("==========Initial Post========================");
-		System.out.println("|Basic post, including some bad faith replies|");
-		System.out.println("==============================================");
-		System.out.println(CSE360.fullList_raw());
-		
-		CSE360.deleteQuestion(id3);
-		CSE360.deleteReply(id2, r2);
-		
-		System.out.println("==========Admin Updates=======================");
-		System.out.println("|Removed bad faith replies                   |");
-		System.out.println("==============================================");
-		
-		System.out.println(CSE360.fullList_raw());
-		
-		System.out.println("==========Raw Answer List=====================");
-		System.out.println("|Display raw answer list, should have no bad |");
-		System.out.println("==============================================");
-		
-		System.out.println(CSE360_a.rawList());
-		
-		System.out.println("==========Raw Question List===================");
-		System.out.println("|Display raw question list, should be all pos|");
-		System.out.println("==============================================");
-		
-		System.out.println(CSE360.fullList_justQuestions_raw());
 	}
 }
