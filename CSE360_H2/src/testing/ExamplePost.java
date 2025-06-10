@@ -1,9 +1,60 @@
 package testing;
 import crud.*;
 import entityClasses.User;
+import validation.CheckUserPass;
 
-public class TestPosting {
+import java.util.Scanner;
+
+public class ExamplePost {
 	public static void main(String[] args){
+		boolean running = true;
+		boolean passValid = false;
+		
+		Scanner userInput = new Scanner(System.in);
+		
+		String username = "anon";
+		String password = "na";
+		
+		System.out.println("WELCOME TO THE DISCUSSION BOARD!");
+		
+		while (!passValid){
+			System.out.print("Enter your username: ");
+			username = userInput.nextLine();
+			
+			System.out.print("Enter your Password: ");
+			password = userInput.nextLine();
+			
+			String errors = CheckUserPass.checkUserPass(username, password);
+			
+			if(!errors.equals("")){
+				System.out.println(errors);
+			} else {
+				System.out.println("\nPassword/Username accepted, welcome in!");
+				passValid = true;
+			}
+			
+		}
+		
+		User thisUser = new User(username, password, false, true, false, false, false);
+		
+		while (running){
+			
+		}
+		
+		userInput.close();
+	}
+
+	public String selection(){
+		String selection = "";
+		
+		while(selection.equals("")){
+			
+		}
+		
+		return selection;
+	}
+	
+	public static void test(){
 		QuestionList CSE360 = new QuestionList("CSE360");
 		AnswerList CSE360_a = new AnswerList("CSE360 answers");
 		CSE360.linkReplies(CSE360_a);
@@ -26,7 +77,7 @@ public class TestPosting {
 		
 		CSE360.deleteQuestion(id3);
 		CSE360.deleteReply(id2, r2);
-		 
+		
 		System.out.println("==========Admin Updates=======================");
 		System.out.println("|Removed bad faith replies                   |");
 		System.out.println("==============================================");
