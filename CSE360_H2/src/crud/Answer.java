@@ -39,7 +39,7 @@ public class Answer {
 	 * @param q is the question we're replying to
 	 */
 	public Answer(Question q){
-		this.RID = "ar-" + q.getTitle()+"|"+q.getNextReply();
+		this.RID = "ar-" + q.getQID()+"|"+q.getNextReply();
 	}
 	
 	/**
@@ -52,7 +52,7 @@ public class Answer {
 	 */
 	public Answer(User poster, Question q){
 		this.postUser = poster;
-		this.RID = "r-"+q.getTitle()+"|"+q.getNextReply();
+		this.RID = "r-"+q.getQID()+"|"+q.getNextReply();
 	}
 	
 	/**
@@ -81,7 +81,7 @@ public class Answer {
 	public Answer(String replyContent, User poster, Question q){
 		this.postUser = poster;
 		this.replyContent = "\""+replyContent+"\"";
-		this.RID = "r-"+q.getTitle()+"|"+q.getNextReply();
+		this.RID = "r-"+q.getQID()+"|"+q.getNextReply();
 	}
 	
 	/**
@@ -94,7 +94,7 @@ public class Answer {
 	 */
 	private void anonreply(String replyContent, Question q){
 		this.replyContent = "\""+replyContent+"\"";
-		this.RID = "ar-" + q.getTitle()+"|"+q.getNextReply();
+		this.RID = "ar-" + q.getQID()+"|"+q.getNextReply();
 		this.postUser = new User("Anon");
 	}
 	

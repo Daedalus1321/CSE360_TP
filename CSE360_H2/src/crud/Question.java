@@ -217,12 +217,12 @@ public class Question {
 	 * @param n/a
 	*/
 	public String fullPost_raw(){
-		String post_raw = postTitle + " - " + postUser.getUserName() + ":\n\t" + postContent + "\n";
+		String post_raw = postTitle + " (" + QID + ")" + " - " + postUser.getUserName() + ":\n" + postContent + "\n";
 		
-		String replies_raw = "   --Replies:\n";
+		String replies_raw = "\t--Replies:\n";
 		
 		for(int i = 0; i < numreplies; i++){
-			replies_raw += "\t" + replies[i].rawReply() + "\n";
+			replies_raw += "" + replies[i].rawReply() + "\n";
 		}
 		
 		return post_raw + replies_raw;

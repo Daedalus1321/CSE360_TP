@@ -76,6 +76,13 @@ public class QuestionList {
 		return questions[numquestions-1].getQID();
 	}
 	
+	public Question getQindex(int index){
+		return questions[index];
+	}
+	public int getNumQ(){
+		return numquestions;
+	}
+	
 	/** <p> Method: linkReplies(AnswerList replies)</p>
 	 * <p> links question list to an answer list</p>
 	 * @param replies is the linked AnswerList
@@ -221,15 +228,15 @@ public class QuestionList {
 	 * @param n/a
 	*/
 	public String fullList_raw(){
-		String list = "QUESTION LIST - " + this.name + ":\n";
+		String list = "QUESTION LIST - " + this.name + ":\n" + "---------------------------------\n";
 		shiftQuestions();
 		
 		for(int i = 0; i < numquestions; i++){
-			list += "---------------------------------\n";
 			list += questions[i].fullPost_raw();
+			list += "---------------------------------\n";
 		}
 		
-		return list + "---------------------------------\n";
+		return list + "[END OF MESSAGEBOARD]\n";
 	}
 	
 	/** <p> Method: fullList_justQuestions_raw()</p>
