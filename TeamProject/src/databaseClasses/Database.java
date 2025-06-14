@@ -731,6 +731,56 @@ public class Database {
 		return;
 	}
 	
+	/*******
+	 * <p> Method: String getPassword(String username) </p>
+	 * 
+	 * <p> Description: Get the password of a user given that user's username.</p>
+	 * 
+	 * @param username is the username of the user
+	 * 
+	 * @return the password of a user given that user's username 
+	 *  
+	 */
+	// Get the Password
+	public String getPassword(String username) {
+		String query = "SELECT password FROM userDB WHERE userName = ?";
+		try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+			pstmt.setString(1, username);
+	        ResultSet rs = pstmt.executeQuery();
+	        
+	        if (rs.next()) {
+	            return rs.getString("password"); // Return the first name if user exists
+	        }
+			
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+		return null;
+	}
+	
+
+	/*******
+	 * <p> Method: void updatePassword(String username, String firstName) </p>
+	 * 
+	 * <p> Description: Update the first name of a user given that user's username and the new
+	 *		first name.</p>
+	 * 
+	 * @param username is the username of the user
+	 * 
+	 * @param firstName is the new first name for the user
+	 *  
+	 */
+	// update the first name
+	public void updatePassword(String username, String password) {
+	    String query = "UPDATE userDB SET password = ? WHERE username = ?";
+	    try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+	        pstmt.setString(1, password);
+	        pstmt.setString(2, username);
+	        pstmt.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 	
 	/*******
 	 * <p> Method: String getFirstName(String username) </p>
@@ -782,6 +832,7 @@ public class Database {
 	        e.printStackTrace();
 	    }
 	}
+	
 
 	
 	/*******
