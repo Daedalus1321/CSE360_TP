@@ -5,12 +5,16 @@ import java.util.Optional;
 
 import applicationMainMethodClasses.FCMainClass;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import validation.CheckUserPass;
+import validation.PasswordEvaluator;
 import databaseClasses.Database;
 import entityClasses.User;
 
@@ -64,6 +68,7 @@ public class GUIAdminUpdatePage {
 
 	private Button button_ProceedToAdminHomePage = new Button("Proceed to the Admin Home Page");
 	
+    private Alert alertUsernamePasswordError = new Alert(AlertType.INFORMATION);
 
 	private Button button_Logout = new Button("Logout");
 	private Button button_Quit = new Button("Quit");
@@ -111,6 +116,10 @@ public class GUIAdminUpdatePage {
 		
 		double WINDOW_WIDTH = FCMainClass.WINDOW_WIDTH;
 
+		TextInputDialog dialogUpdatePassword = new TextInputDialog();
+		dialogUpdatePassword.setTitle("Update Password");
+		dialogUpdatePassword.setHeaderText("Update your Password");
+		
 		TextInputDialog dialogUpdateFirstName = new TextInputDialog();
 		dialogUpdateFirstName.setTitle("Update First Name");
 		dialogUpdateFirstName.setHeaderText("Update your First Name");
@@ -144,6 +153,21 @@ public class GUIAdminUpdatePage {
         setupLabelUI(label_Password, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 150);
         setupLabelUI(label_CurrentPassword, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 150);
         setupButtonUI(button_UpdatePassword, "Dialog", 18, 275, Pos.CENTER, 500, 143);
+        button_UpdatePassword.setOnAction((event) -> 
+    	{result = dialogUpdatePassword.showAndWait();
+		result.ifPresent(name -> 
+			database.updatePassword(theUser.getUserName(), result.get()));
+		database.getUserAccountDetails(theUser.getUserName());
+		String newPassword = database.getCurrentPassword();
+		String error = PasswordEvaluator.evaluatePassword(newPassword);
+		if (!PasswordEvaluator.evaluatePassword(newPassword).equals("")) {
+			String passwordErrors = PasswordEvaluator.evaluatePassword(newPassword);
+    		alertUsernamePasswordError.setContentText("Password Error: " + passwordErrors + "\n");
+    		alertUsernamePasswordError.showAndWait();
+			return;
+		}
+    	else label_CurrentPassword.setText(newPassword);
+		});
         
         setupLabelUI(label_FirstName, "Arial", 18, 190, Pos.BASELINE_RIGHT, 5, 200);
         setupLabelUI(label_CurrentFirstName, "Arial", 18, 260, Pos.BASELINE_LEFT, 200, 200);
